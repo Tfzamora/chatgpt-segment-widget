@@ -18,7 +18,8 @@ export default function Home() {
     setLoading(true);
     setResult('');
 
-    const res = await fetch('/api/segment', {
+    const res = await fetch('https://chatgpt-segment-widget.vercel.app/api/segment', {
+
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
