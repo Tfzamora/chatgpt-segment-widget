@@ -14,21 +14,41 @@ export default function Home() {
   }, [result]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setResult('');
+  e.preventDefault();
 
-    const res = await fetch('https://chatgpt-segment-widget.vercel.app/api/segment', {
+  if (!url.trim()) {
+    alert('Please enter a valid website URL.');
+    return;
+  }
 
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
-    });
+  setLoading(true);
+  setResult('');
+
+  try {
+   const res = await fetch('/api/segment', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ url }),
+});
+
 
     const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Request failed');
+    }
+
     setResult(data.result);
+    setUrl('');
+  } catch (err) {
+    console.error('Fetch error:', err);
+    setResult('Sorry, something went wrong. Please try again.');
+  } finally {
     setLoading(false);
-  };
+  }
+};
+
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-gray-50">
@@ -51,16 +71,39 @@ export default function Home() {
         />
        <button
   type="submit"
-  className="w-full font-medium transition px-4 py-2 transform active:scale-95 active:bg-[#2F8991]"
   disabled={loading}
+  className={`w-full font-medium transition px-4 py-2 transform active:scale-95 ${
+    loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#3AA6B0]'
+  }`}
   style={{
-    backgroundColor: '#3AA6B0',
     color: 'white',
     borderRadius: '0px',
   }}
 >
-  {loading ? 'Generating...' : 'Generate Profile'}
+  {loading ? (
+    <div className="flex items-center justify-center space-x-2">
+      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8z"
+        ></path>
+      </svg>
+      <span>Generating...</span>
+    </div>
+  ) : (
+    'Generate Profile'
+  )}
 </button>
+
 
 
       </form>
