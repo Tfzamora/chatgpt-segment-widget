@@ -1,5 +1,6 @@
 'use client';
 
+import SegmentProfileCard from '../components/SegmentProfileCard';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import MarkdownOutput from '../components/MarkdownOutput';
@@ -51,7 +52,7 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-white">
      
       <form
         onSubmit={handleSubmit}
@@ -109,22 +110,21 @@ export default function Home() {
       </form>
 
       {result && (
- <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
-
+  <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
     <div className="bg-white w-[90vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] h-[80vh] p-6 rounded-xl shadow-lg relative border border-gray-300 overflow-y-auto">
-
       <button
-  onClick={() => setResult('')}
-  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold transition transform active:scale-95"
-  aria-label="Close"
->
-  ×
-</button>
+        onClick={() => setResult('')}
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold transition transform active:scale-95"
+        aria-label="Close"
+      >
+        ×
+      </button>
 
-      <MarkdownOutput content={result} />
+      <SegmentProfileCard content={result} />
     </div>
   </div>
 )}
+
 
     </div>
   );
